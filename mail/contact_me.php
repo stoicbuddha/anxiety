@@ -5,7 +5,7 @@ use PHPMailer\PHPMailer;
 use PHPMailer\Exception;
 
 //Load Composer's autoloader
-// require 'vendor/autoload.php';
+require 'vendor/autoload.php';
 
 $mail = new PHPMailer(true);                              // Passing `true` enables exceptions
 try {
@@ -20,6 +20,7 @@ try {
 
     $mail->send();
     echo 'Message has been sent';
+    return true;
 } catch (Exception $e) {
     echo 'Message could not be sent. Mailer Error: ', $mail->ErrorInfo;
     return false;
