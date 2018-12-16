@@ -1,27 +1,27 @@
 <?php
-// Check for empty fields
-if(empty($_POST['name'])      ||
-   empty($_POST['email'])     ||
-   empty($_POST['phone'])     ||
-   empty($_POST['message'])   ||
-   !filter_var($_POST['email'],FILTER_VALIDATE_EMAIL))
-   {
-   echo "No arguments Provided!";
-   return false;
-   }
+// Import PHPMailer classes into the global namespace
+// These must be at the top of your script, not inside a function
+use PHPMailer\PHPMailer;
+use PHPMailer\Exception;
 
-$name = strip_tags(htmlspecialchars($_POST['name']));
-$email_address = strip_tags(htmlspecialchars($_POST['email']));
-$phone = strip_tags(htmlspecialchars($_POST['phone']));
-$message = strip_tags(htmlspecialchars($_POST['message']));
+//Load Composer's autoloader
+// require 'vendor/autoload.php';
 
-// Create the email and send the message
-$to = 'matt.iakhno@gmail.com'; // Add your email address inbetween the '' replacing yourname@yourdomain.com - This is where the form will send a message to.
-$email_subject = "Website Contact Form:  $name";
-$email_body = "You have received a new message from your website contact form.\n\n"."Here are the details:\n\nName: $name\n\nEmail: $email_address\n\nPhone: $phone\n\nMessage:\n$message";
-$headers = "From: booking@approachconsulting.ca\n"; // This is the email address the generated message will be from. We recommend using something like noreply@yourdomain.com.
-$headers .= "Reply-To: $email_address";
-$headers .= "To: $to\r\n";
-mail($to,$email_subject,$email_body,$headers);
-return true;
+$mail = new PHPMailer(true);                              // Passing `true` enables exceptions
+try {
+    //Server settings
+    $mail->setFrom('booking@approachconsulting.ca', 'Your Name');
+    $mail->addAddress('matt.iakhno@gmail.com', 'My Friend');
+    $mail->Subject  = 'First PHPMailer Message';
+    $mail->Body     = 'Hi! This is my first e-mail sent through PHPMailer.';                              // TCP port to connect to
+
+    //Content
+    $mail->isHTML(true);                                  // Set email format to HTML
+
+    $mail->send();
+    echo 'Message has been sent';
+} catch (Exception $e) {
+    echo 'Message could not be sent. Mailer Error: ', $mail->ErrorInfo;
+    return false;
+}
 ?>
